@@ -8,7 +8,7 @@ source ${SCRIPT_DIR}/versions.sh
 # original docker push command
 echo "overwriting docker push $IMAGE_NAME"
 
-$NGINX_VERSIONS | while read nginx_version
+echo -e $NGINX_VERSIONS | while read nginx_version
 do
     # The new image tag will include the version of our software, prefixed to the os image we're currently building
     IMAGE_TAG="${DOCKER_REPO}:${nginx_version}-${DOCKER_TAG}"
