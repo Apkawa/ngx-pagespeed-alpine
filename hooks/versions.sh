@@ -2,4 +2,7 @@
 
 set -ex
 
-NGINX_VERSIONS=$(jq -r '.nginx | .[]' build-versions.json)
+read -r -d '' NGINX_VERSIONS << EOM
+1.21.1
+1.20.1
+EOM
