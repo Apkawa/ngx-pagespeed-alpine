@@ -1,4 +1,6 @@
 ARG ALPINE_VERSION=edge
+ARG PAGESPEED_VERSION=1.13.35.2
+ARG NGINX_VERSION=1.20.1
 
 ########################
 # Build pagespeed psol #
@@ -6,7 +8,7 @@ ARG ALPINE_VERSION=edge
 FROM alpine:$ALPINE_VERSION as pagespeed
 
 # Check https://github.com/apache/incubator-pagespeed-mod/tags
-ARG MOD_PAGESPEED_TAG=v1.13.35.2
+ARG MOD_PAGESPEED_TAG=v$PAGESPEED_VERSION
 
 RUN apk add --no-cache \
         apache2-dev \
@@ -76,10 +78,10 @@ RUN mkdir -p /usr/src/ngxpagespeed/psol/lib/Release/linux/x64 && \
 FROM alpine:$ALPINE_VERSION AS nginx
 
 # Check https://github.com/apache/incubator-pagespeed-ngx/tags
-ARG NGX_PAGESPEED_TAG=v1.13.35.2-stable
+ARG NGX_PAGESPEED_TAG=v$PAGESPEED_VERSION-stable
 
 # Check http://nginx.org/en/download.html for the latest version.
-ARG NGINX_VERSION=1.14.0
+#ARG NGINX_VERSION=$NGINX_VERSION
 ARG NGINX_PGPKEY=520A9993A1C052F8
 ARG NGINX_BUILD_CONFIG="\
         --prefix=/etc/nginx \
@@ -203,9 +205,9 @@ COPY pagespeed.png /usr/share/nginx/html/
 ##########################################
 FROM alpine:$ALPINE_VERSION
 LABEL maintainer="Nico Berlee <nico.berlee@on2it.net>" \
-      version.mod-pagespeed="1.13.35.2" \
-      version.nginx="1.14.0" \
-      version.ngx-pagespeed="1.13.35.2"
+      version.mod-pagespeed=$PAGESPEED_VERSION \
+      version.ngx-pagespeed=$PAGESPEED_VERSION \
+      version.nginx=$NGINX_VERSION
 
 COPY --from=pagespeed /usr/bin/envsubst /usr/local/bin
 COPY --from=nginx /usr/sbin/nginx /usr/sbin/nginx
